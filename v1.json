@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "https://tinet.tkbstudios.com/api/vx",
+      "url": "https://tinet.tkbstudios.com/api",
       "description": "Production server"
     }
   ],
