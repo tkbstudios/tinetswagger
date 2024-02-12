@@ -16,6 +16,7 @@
       "get": {
         "summary": "Root API endpoint",
         "operationId": "getRoot",
+        "security": [{"APIKeyAuth": []}],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -66,6 +67,7 @@
       "get": {
         "summary": "Get user information",
         "operationId": "getUserInfo",
+        "security": [{"APIKeyAuth": []}],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -95,6 +97,7 @@
       "get": {
         "summary": "Download user keyfile",
         "operationId": "downloadKeyfile",
+        "security": [{"APIKeyAuth": []}],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -114,6 +117,7 @@
       "get": {
         "summary": "Reset user keyfile",
         "operationId": "resetKeyfile",
+        "security": [{"APIKeyAuth": []}],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -138,6 +142,7 @@
       "get": {
         "summary": "Generate new API key for user",
         "operationId": "generateNewApiKey",
+        "security": [{"APIKeyAuth": []}],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -162,6 +167,7 @@
       "post": {
         "summary": "Expire all user sessions",
         "operationId": "expireUserSessions",
+        "security": [{"APIKeyAuth": []}],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -180,6 +186,15 @@
             }
           }
         }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "APIKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "Api-Key"
       }
     }
   }
