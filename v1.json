@@ -185,18 +185,6 @@
                       "type": "boolean",
                       "example": true
                     },
-                    "user": {
-                      "type": "object",
-                      "properties": {
-                        "username": {
-                          "type": "string"
-                        },
-                        "email": {
-                          "type": "string",
-                          "format": "email"
-                        }
-                      }
-                    }
                   }
                 }
               }
