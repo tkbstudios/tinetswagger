@@ -172,7 +172,7 @@
     },
     "/v1/user/calc/auth": {
       "post": {
-        "summary": "Authenticate user with calculator",
+        "summary": "Authenticate user with calculator key.",
         "operationId": "authenticateUserWithCalculator",
         "requestBody": {
           "required": true,
