@@ -1,269 +1,269 @@
 {
-    "openapi": "3.0.0",
-    "info": {
-        "title": "TINET API",
-        "description": "API for TINET backend services",
-        "version": "1.1.0"
-    },
-    "servers": [
-        {
-            "url": "https://tinet.tkbstudios.com/api",
-            "description": "Production server"
-        }
-    ],
-    "paths": {
-        "/v1": {
-            "get": {
-                "summary": "Root API endpoint",
-                "operationId": "getRoot",
-                "security": [
-                    {
-                        "APIKeyAuth": []
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "name": {
-                                            "type": "string",
-                                            "example": "TINET API V1"
-                                        },
-                                        "identifier": {
-                                            "type": "string",
-                                            "example": "V1"
-                                        },
-                                        "version": {
-                                            "type": "object",
-                                            "properties": {
-                                                "major": {
-                                                    "type": "integer",
-                                                    "example": 1
-                                                },
-                                                "minor": {
-                                                    "type": "integer",
-                                                    "example": 0
-                                                },
-                                                "revision": {
-                                                    "type": "integer",
-                                                    "example": 0
-                                                }
-                                            }
-                                        },
-                                        "server_time": {
-                                            "type": "number",
-                                            "format": "float",
-                                            "example": 1644691200
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/user/info": {
-            "get": {
-                "summary": "Get user information",
-                "operationId": "getUserInfo",
-                "security": [
-                    {
-                        "APIKeyAuth": []
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "username": {
-                                            "type": "string",
-                                            "example": "john_doe"
-                                        },
-                                        "email": {
-                                            "type": "string",
-                                            "format": "email",
-                                            "example": "john.doe@example.com"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/user/keyfile/download": {
-            "get": {
-                "summary": "Download key file",
-                "operationId": "downloadKeyFile",
-                "security": [
-                    {
-                        "APIKeyAuth": []
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/octet-stream": {
-                                "schema": {
-                                    "type": "string",
-                                    "format": "binary"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/user/apikey/new": {
-            "get": {
-                "summary": "Generate new API key",
-                "operationId": "generateNewApiKey",
-                "security": [
-                    {
-                        "APIKeyAuth": []
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "api_key": {
-                                            "type": "string",
-                                            "example": "generated_api_key"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/user/sessions/expireall": {
-            "post": {
-                "summary": "Expire all user sessions",
-                "operationId": "expireAllUserSessions",
-                "security": [
-                    {
-                        "APIKeyAuth": []
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful operation"
-                    }
-                }
-            }
-        },
-        "/v1/user/calc/auth": {
-            "post": {
-                "summary": "Authenticate user with calculator",
-                "operationId": "authenticateUserWithCalculator",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "username": {
-                                        "type": "string"
-                                    },
-                                    "calc_key": {
-                                        "type": "string"
-                                    }
-                                },
-                                "required": [
-                                    "username",
-                                    "calc_key"
-                                ]
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "auth_success": {
-                                            "type": "boolean",
-                                            "example": true
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "User not found or invalid credentials",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "auth_success": {
-                                            "type": "boolean",
-                                            "example": false
-                                        },
-                                        "error": {
-                                            "type": "string",
-                                            "example": "User not found or invalid credentials"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Unexpected Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "auth_success": {
-                                            "type": "boolean",
-                                            "example": false
-                                        },
-                                        "error": {
-                                            "type": "string",
-                                            "example": "Unexpected Error, are you sure all fields are correct?"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    },
-    "components": {
-        "securitySchemes": {
-            "APIKeyAuth": {
-                "type": "apiKey",
-                "in": "header",
-                "name": "Api-Key"
-            }
-        }
+  "openapi": "3.0.0",
+  "info": {
+    "title": "TINET API",
+    "description": "API for TINET backend services",
+    "version": "1.1.0"
+  },
+  "servers": [
+    {
+      "url": "https://tinet.tkbstudios.com/api",
+      "description": "Production server"
     }
+  ],
+  "paths": {
+    "/v1": {
+      "get": {
+        "summary": "Root API endpoint",
+        "operationId": "getRoot",
+        "security": [
+          {
+            "APIKeyAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "example": "TINET API V1"
+                    },
+                    "identifier": {
+                      "type": "string",
+                      "example": "V1"
+                    },
+                    "version": {
+                      "type": "object",
+                      "properties": {
+                        "major": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "minor": {
+                          "type": "integer",
+                          "example": 0
+                        },
+                        "revision": {
+                          "type": "integer",
+                          "example": 0
+                        }
+                      }
+                    },
+                    "server_time": {
+                      "type": "number",
+                      "format": "float",
+                      "example": 1644691200
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/user/info": {
+      "get": {
+        "summary": "Get user information",
+        "operationId": "getUserInfo",
+        "security": [
+          {
+            "APIKeyAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "username": {
+                      "type": "string",
+                      "example": "john_doe"
+                    },
+                    "email": {
+                      "type": "string",
+                      "format": "email",
+                      "example": "john.doe@example.com"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/user/keyfile/download": {
+      "get": {
+        "summary": "Download key file",
+        "operationId": "downloadKeyFile",
+        "security": [
+          {
+            "APIKeyAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/user/apikey/new": {
+      "get": {
+        "summary": "Generate new API key",
+        "operationId": "generateNewApiKey",
+        "security": [
+          {
+            "APIKeyAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "api_key": {
+                      "type": "string",
+                      "example": "generated_api_key"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/user/sessions/expireall": {
+      "post": {
+        "summary": "Expire all user sessions",
+        "operationId": "expireAllUserSessions",
+        "security": [
+          {
+            "APIKeyAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          }
+        }
+      }
+    },
+    "/v1/user/calc/auth": {
+      "post": {
+        "summary": "Authenticate user with calculator",
+        "operationId": "authenticateUserWithCalculator",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string"
+                  },
+                  "calc_key": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "username",
+                  "calc_key"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "auth_success": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found or invalid credentials",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "auth_success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "string",
+                      "example": "User not found or invalid credentials"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "auth_success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "error": {
+                      "type": "string",
+                      "example": "Unexpected Error, are you sure all fields are correct?"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "APIKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "Api-Key"
+      }
+    }
+  }
 }
