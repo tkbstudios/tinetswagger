@@ -208,9 +208,9 @@
                       "type": "boolean",
                       "example": true
                     },
-                    "username": {
+                    "session": {
                       "type": "string",
-                      "example": "john_doe"
+                      "example": "wMWhMEJ7G2X4HZpaY2izhbbT184FEpVLwMWhMEJ7G2X4HZpaY2izhbbT184FEpVLwMWhMEJ7G2X4HZpaY2izhbbT184FEpVLwMWhMEJ7G2X4HZpaY2izhbbT184FEpVLwMWhMEJ7G2X4HZpaY2izhbbT184FEpVLwMWhMEJ7G2X4HZpaY2izhbbT184FEpVLwMWhMEJ7G2X4HZpaY2izhbbT184FEpVLwMWhMEJ7G2X4HZpaY2izhbbT184FEpVL"
                     }
                   }
                 }
