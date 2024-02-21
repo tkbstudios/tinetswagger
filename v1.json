@@ -260,9 +260,9 @@
         }
       }
     },
-    "/api/authenticate/": {
+    "/v1/user/calc/auth": {
       "post": {
-        "summary": "Authenticate user with username and calc_key",
+        "summary": "Authenticate user with username and calc_key and get a session token",
         "requestBody": {
           "required": true,
           "content": {
@@ -352,7 +352,7 @@
         }
       }
     },
-    "/v1/user/session/auth": {
+    "/v1/user/sessions/auth": {
       "post": {
         "summary": "Authenticate user with session token",
         "requestBody": {
