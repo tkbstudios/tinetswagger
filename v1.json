@@ -259,8 +259,214 @@
           }
         }
       }
+    },
+    "/api/authenticate/": {
+      "post": {
+        "summary": "Authenticate user with username and calc_key",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "description": "The username of the user"
+                  },
+                  "calc_key": {
+                    "type": "string",
+                    "description": "The calc_key for authentication"
+                  }
+                },
+                "required": ["username", "calc_key"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Authentication successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "auth_success": {
+                      "type": "boolean",
+                      "description": "Indicates if authentication was successful"
+                    },
+                    "username": {
+                      "type": "string",
+                      "description": "The username of the authenticated user"
+                    },
+                    "session_token": {
+                      "type": "string",
+                      "description": "The session token for further authentication"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found or invalid credentials",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "auth_success": {
+                      "type": "boolean",
+                      "description": "Indicates if authentication was successful"
+                    },
+                    "error": {
+                      "type": "string",
+                      "description": "Error message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "auth_success": {
+                      "type": "boolean",
+                      "description": "Indicates if authentication was successful"
+                    },
+                    "error": {
+                      "type": "string",
+                      "description": "Error message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/user/session/auth": {
+      "post": {
+        "summary": "Authenticate user with session token",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "session_token": {
+                    "type": "string",
+                    "description": "The session token for authentication"
+                  }
+                },
+                "required": ["session_token"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Authentication successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "username": {
+                      "type": "string",
+                      "description": "The username of the authenticated user"
+                    },
+                    "email": {
+                      "type": "string",
+                      "description": "The email of the authenticated user"
+                    },
+                    "date_joined": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "The date and time when the user joined"
+                    },
+                    "last_login": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "The date and time when the user last logged in"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session token expired",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "auth_success": {
+                      "type": "boolean",
+                      "description": "Indicates if authentication was successful"
+                    },
+                    "error": {
+                      "type": "string",
+                      "description": "Error message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Invalid session token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "auth_success": {
+                      "type": "boolean",
+                      "description": "Indicates if authentication was successful"
+                    },
+                    "error": {
+                      "type": "string",
+                      "description": "Error message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "auth_success": {
+                      "type": "boolean",
+                      "description": "Indicates if authentication was successful"
+                    },
+                    "error": {
+                      "type": "string",
+                      "description": "Error message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
-  },
+  }
   "components": {
     "securitySchemes": {
       "APIKeyAuth": {
