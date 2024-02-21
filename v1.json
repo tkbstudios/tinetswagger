@@ -207,6 +207,10 @@
                     "auth_success": {
                       "type": "boolean",
                       "example": true
+                    },
+                    "username": {
+                      "type": "string",
+                      "example": "john_doe"
                     }
                   }
                 }
