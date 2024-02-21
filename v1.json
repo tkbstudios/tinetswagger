@@ -376,7 +376,7 @@
         }
       }
     }
-  }
+  },
   "components": {
     "securitySchemes": {
       "APIKeyAuth": {
