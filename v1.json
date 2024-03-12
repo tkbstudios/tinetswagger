@@ -731,6 +731,196 @@
           }
         }
       }
+    },
+    "/v1/leaderboards/decrement": {
+      "post": {
+        "summary": "Decrement Leaderboard Entry",
+        "operationId": "decrementLeaderboardEntry",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "leaderboard_id": {
+                    "type": "integer",
+                    "format": "int64"
+                  },
+                  "username": {
+                    "type": "string"
+                  },
+                  "count": {
+                    "type": "integer",
+                    "format": "int32"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Leaderboard entry created or updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Leaderboard entry created successfully"
+                    },
+                    "score": {
+                      "type": "integer",
+                      "format": "int64"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Leaderboard does not match the App API Key"
+          }
+        }
+      }
+    },
+    "/v1/leaderboards/set": {
+      "post": {
+        "summary": "Set Leaderboard Entry",
+        "operationId": "setLeaderboardEntry",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "leaderboard_id": {
+                    "type": "integer",
+                    "format": "int64"
+                  },
+                  "username": {
+                    "type": "string"
+                  },
+                  "count": {
+                    "type": "integer",
+                    "format": "int32"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Leaderboard entry created or updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Leaderboard entry created successfully"
+                    },
+                    "score": {
+                      "type": "integer",
+                      "format": "int64"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Leaderboard does not match the App API Key"
+          }
+        }
+      }
+    },
+    "/v1/leaderboards/delete": {
+      "delete": {
+        "summary": "Delete Leaderboard Entry",
+        "operationId": "deleteLeaderboardEntry",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "leaderboard_id": {
+                    "type": "integer",
+                    "format": "int64"
+                  },
+                  "username": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Leaderboard entry deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Leaderboard entry deleted successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Leaderboard does not match the App API Key"
+          }
+        }
+      }
     }
   },
   "components": {
