@@ -1,0 +1,374 @@
+openapi: 3.0.0
+info:
+  title: TINET API
+  version: 1.0.0
+  description: API endpoints for TINET service
+servers:
+  - url: https://tinet.tkbstudios.com/api
+paths:
+  /v1:
+    get:
+      summary: Get API information
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  identifier:
+                    type: string
+                  version:
+                    type: object
+                    properties:
+                      major:
+                        type: integer
+                      minor:
+                        type: integer
+                      revision:
+                        type: integer
+                  server_time:
+                    type: integer
+                  your_ip:
+                    type: string
+  /v1/user/info:
+    get:
+      summary: Get user information
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  username:
+                    type: string
+                  email:
+                    type: string
+  /v1/user/sessions/expireallweb:
+    post:
+      summary: Expire all web sessions
+      responses:
+        '200':
+          description: Successful operation
+  /v1/user/keyfile/download:
+    get:
+      summary: Download key file
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+  /v1/user/apikey/new:
+    get:
+      summary: Generate new API key
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  api_key:
+                    type: string
+  /v1/user/calc/auth:
+    post:
+      summary: Authenticate for calculator
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                calc_key:
+                  type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  auth_success:
+                    type: boolean
+                  username:
+                    type: string
+                  session_token:
+                    type: string
+        '404':
+          description: User not found or invalid credentials
+        '500':
+          description: Unexpected Error
+  /v1/user/sessions/auth:
+    post:
+      summary: Authenticate session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                session_token:
+                  type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  username:
+                    type: string
+                  email:
+                    type: string
+                  bio:
+                    type: string
+                  date_joined:
+                    type: string
+                    format: date-time
+                  last_login:
+                    type: string
+                    format: date-time
+        '403':
+          description: User has not granted access to the app
+        '401':
+          description: Session token expired
+        '404':
+          description: Invalid session token
+  /v1/user/sessions/validity-check:
+    post:
+      summary: Check session validity
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                session_token:
+                  type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  valid:
+                    type: boolean
+        '401':
+          description: Session token expired
+        '404':
+          description: Invalid session token
+  /v1/user/sessions/expireallcalc:
+    post:
+      summary: Expire all calculator session tokens
+      responses:
+        '200':
+          description: Successful operation
+  /v1/user/edit/bio:
+    post:
+      summary: Edit user bio
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                bio:
+                  type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  new_bio:
+                    type: string
+        '400':
+          description: Bio field not found in the request
+  /v1/user/databases/create:
+    post:
+      summary: Create user database
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  database_name:
+                    type: string
+                  username:
+                    type: string
+                  password:
+                    type: string
+        '500':
+          description: Internal Server Error
+  /v1/user/files/upload:
+    post:
+      summary: Upload files
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                files:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  files:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        success:
+                          type: boolean
+                        message:
+                          type: string
+                        filename:
+                          type: string
+        '400':
+          description: Error: No files provided
+  /v1/user/files/list:
+    get:
+      summary: List user files
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  files:
+                    type: array
+                    items:
+                      type: string
+  /v1/user/files/delete:
+    delete:
+      summary: Delete user files
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                filenames:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  deleted_files:
+                    type: array
+                    items:
+                      type: string
+                  not_found_files:
+                    type: array
+                    items:
+                      type: string
+  /v1/user/files/download:
+    get:
+      summary: Download user file
+      parameters:
+        - name: filename
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '404':
+          description: Error: File does not exist
+  /v1/leaderboards/increment:
+    post:
+      summary: Increment leaderboard score
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                leaderboard_id:
+                  type: string
+                username:
+                  type: string
+                count:
+                  type: integer
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  score:
+                    type: integer
+        '401':
+          description: Invalid App API Key
+        '500':
+          description: Unexpected Error
