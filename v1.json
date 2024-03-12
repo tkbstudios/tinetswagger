@@ -2,25 +2,18 @@
   "openapi": "3.0.0",
   "info": {
     "title": "TINET API",
-    "description": "API for TINET backend services",
-    "version": "1.1.0"
+    "version": "1.0.0",
+    "description": "API endpoints for TINET service"
   },
   "servers": [
     {
-      "url": "https://tinet.tkbstudios.com/api",
-      "description": "Production server"
+      "url": "https://api.tinet.com"
     }
   ],
   "paths": {
     "/v1": {
       "get": {
-        "summary": "Root API endpoint",
-        "operationId": "getRoot",
-        "security": [
-          {
-            "APIKeyAuth": []
-          }
-        ],
+        "summary": "Get API information",
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -30,34 +23,30 @@
                   "type": "object",
                   "properties": {
                     "name": {
-                      "type": "string",
-                      "example": "TINET API V1"
+                      "type": "string"
                     },
                     "identifier": {
-                      "type": "string",
-                      "example": "V1"
+                      "type": "string"
                     },
                     "version": {
                       "type": "object",
                       "properties": {
                         "major": {
-                          "type": "integer",
-                          "example": 1
+                          "type": "integer"
                         },
                         "minor": {
-                          "type": "integer",
-                          "example": 0
+                          "type": "integer"
                         },
                         "revision": {
-                          "type": "integer",
-                          "example": 0
+                          "type": "integer"
                         }
                       }
                     },
                     "server_time": {
-                      "type": "number",
-                      "format": "float",
-                      "example": 1644691200
+                      "type": "integer"
+                    },
+                    "your_ip": {
+                      "type": "string"
                     }
                   }
                 }
@@ -70,12 +59,6 @@
     "/v1/user/info": {
       "get": {
         "summary": "Get user information",
-        "operationId": "getUserInfo",
-        "security": [
-          {
-            "APIKeyAuth": []
-          }
-        ],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -85,13 +68,10 @@
                   "type": "object",
                   "properties": {
                     "username": {
-                      "type": "string",
-                      "example": "john_doe"
+                      "type": "string"
                     },
                     "email": {
-                      "type": "string",
-                      "format": "email",
-                      "example": "john.doe@example.com"
+                      "type": "string"
                     }
                   }
                 }
@@ -101,15 +81,19 @@
         }
       }
     },
+    "/v1/user/sessions/expireallweb": {
+      "post": {
+        "summary": "Expire all web sessions",
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          }
+        }
+      }
+    },
     "/v1/user/keyfile/download": {
       "get": {
         "summary": "Download key file",
-        "operationId": "downloadKeyFile",
-        "security": [
-          {
-            "APIKeyAuth": []
-          }
-        ],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -128,12 +112,6 @@
     "/v1/user/apikey/new": {
       "get": {
         "summary": "Generate new API key",
-        "operationId": "generateNewApiKey",
-        "security": [
-          {
-            "APIKeyAuth": []
-          }
-        ],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -143,8 +121,7 @@
                   "type": "object",
                   "properties": {
                     "api_key": {
-                      "type": "string",
-                      "example": "generated_api_key"
+                      "type": "string"
                     }
                   }
                 }
@@ -154,25 +131,9 @@
         }
       }
     },
-    "/v1/user/sessions/expireall": {
-      "post": {
-        "summary": "Expire all user sessions",
-        "operationId": "expireAllUserSessions",
-        "security": [
-          {
-            "APIKeyAuth": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful operation"
-          }
-        }
-      }
-    },
     "/v1/user/calc/auth": {
       "post": {
-        "summary": "Authenticate user with username and calc_key and get a session token",
+        "summary": "Authenticate for calculator",
         "requestBody": {
           "required": true,
           "content": {
@@ -181,38 +142,32 @@
                 "type": "object",
                 "properties": {
                   "username": {
-                    "type": "string",
-                    "description": "The username of the user"
+                    "type": "string"
                   },
                   "calc_key": {
-                    "type": "string",
-                    "description": "The calc_key for authentication"
+                    "type": "string"
                   }
-                },
-                "required": ["username", "calc_key"]
+                }
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Authentication successful",
+            "description": "Successful operation",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
                     "auth_success": {
-                      "type": "boolean",
-                      "description": "Indicates if authentication was successful"
+                      "type": "boolean"
                     },
                     "username": {
-                      "type": "string",
-                      "description": "The username of the authenticated user"
+                      "type": "string"
                     },
                     "session_token": {
-                      "type": "string",
-                      "description": "The session token for further authentication"
+                      "type": "string"
                     }
                   }
                 }
@@ -220,19 +175,201 @@
             }
           },
           "404": {
-            "description": "User not found or invalid credentials",
+            "description": "User not found or invalid credentials"
+          },
+          "500": {
+            "description": "Unexpected Error"
+          }
+        }
+      }
+    },
+    "/v1/user/sessions/auth": {
+      "post": {
+        "summary": "Authenticate session",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "session_token": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "auth_success": {
-                      "type": "boolean",
-                      "description": "Indicates if authentication was successful"
+                    "username": {
+                      "type": "string"
                     },
-                    "error": {
+                    "email": {
+                      "type": "string"
+                    },
+                    "bio": {
+                      "type": "string"
+                    },
+                    "date_joined": {
                       "type": "string",
-                      "description": "Error message"
+                      "format": "date-time"
+                    },
+                    "last_login": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "User has not granted access to the app"
+          },
+          "401": {
+            "description": "Session token expired"
+          },
+          "404": {
+            "description": "Invalid session token"
+          }
+        }
+      }
+    },
+    "/v1/user/sessions/validity-check": {
+      "post": {
+        "summary": "Check session validity",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string"
+                  },
+                  "session_token": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "valid": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Session token expired"
+          },
+          "404": {
+            "description": "Invalid session token"
+          }
+        }
+      }
+    },
+    "/v1/user/sessions/expireallcalc": {
+      "post": {
+        "summary": "Expire all calculator session tokens",
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          }
+        }
+      }
+    },
+    "/v1/user/edit/bio": {
+      "post": {
+        "summary": "Edit user bio",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "bio": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "new_bio": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bio field not found in the request"
+          }
+        }
+      }
+    },
+    "/v1/user/databases/create": {
+      "post": {
+        "summary": "Create user database",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "database_name": {
+                      "type": "string"
+                    },
+                    "username": {
+                      "type": "string"
+                    },
+                    "password": {
+                      "type": "string"
                     }
                   }
                 }
@@ -240,19 +377,88 @@
             }
           },
           "500": {
-            "description": "Unexpected error",
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/v1/user/files/upload": {
+      "post": {
+        "summary": "Upload files",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "files": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "auth_success": {
-                      "type": "boolean",
-                      "description": "Indicates if authentication was successful"
+                    "files": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "success": {
+                            "type": "boolean"
+                          },
+                          "message": {
+                            "type": "string"
+                          },
+                          "filename": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error: No files provided"
+          }
+        }
+      }
+    },
+    "/v1/user/files/list": {
+      "get": {
+        "summary": "List user files",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
                     },
-                    "error": {
-                      "type": "string",
-                      "description": "Error message"
+                    "files": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
                     }
                   }
                 }
@@ -262,9 +468,9 @@
         }
       }
     },
-    "/v1/user/sessions/auth": {
-      "post": {
-        "summary": "Authenticate user with session token",
+    "/v1/user/files/delete": {
+      "delete": {
+        "summary": "Delete user files",
         "requestBody": {
           "required": true,
           "content": {
@@ -272,101 +478,39 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "session_token": {
-                    "type": "string",
-                    "description": "The session token for authentication"
+                  "filenames": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
                   }
-                },
-                "required": ["session_token"]
+                }
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Authentication successful",
+            "description": "Successful operation",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "username": {
-                      "type": "string",
-                      "description": "The username of the authenticated user"
+                    "success": {
+                      "type": "boolean"
                     },
-                    "email": {
-                      "type": "string",
-                      "description": "The email of the authenticated user"
+                    "deleted_files": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
                     },
-                    "date_joined": {
-                      "type": "string",
-                      "format": "date-time",
-                      "description": "The date and time when the user joined"
-                    },
-                    "last_login": {
-                      "type": "string",
-                      "format": "date-time",
-                      "description": "The date and time when the user last logged in"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Session token expired",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "auth_success": {
-                      "type": "boolean",
-                      "description": "Indicates if authentication was successful"
-                    },
-                    "error": {
-                      "type": "string",
-                      "description": "Error message"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Invalid session token",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "auth_success": {
-                      "type": "boolean",
-                      "description": "Indicates if authentication was successful"
-                    },
-                    "error": {
-                      "type": "string",
-                      "description": "Error message"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "auth_success": {
-                      "type": "boolean",
-                      "description": "Indicates if authentication was successful"
-                    },
-                    "error": {
-                      "type": "string",
-                      "description": "Error message"
+                    "not_found_files": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
                     }
                   }
                 }
@@ -375,14 +519,91 @@
           }
         }
       }
-    }
-  },
-  "components": {
-    "securitySchemes": {
-      "APIKeyAuth": {
-        "type": "apiKey",
-        "in": "header",
-        "name": "Api-Key"
+    },
+    "/v1/user/files/download": {
+      "get": {
+        "summary": "Download user file",
+        "parameters": [
+          {
+            "name": "filename",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error: File does not exist"
+          }
+        }
+      }
+    },
+    "/v1/leaderboards/increment": {
+      "post": {
+        "summary": "Increment leaderboard score",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "leaderboard_id": {
+                    "type": "string"
+                  },
+                  "username": {
+                    "type": "string"
+                  },
+                  "count": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "score": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid App API Key"
+          },
+          "500": {
+            "description": "Unexpected Error"
+          }
+        }
       }
     }
   }
